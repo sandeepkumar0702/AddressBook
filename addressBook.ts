@@ -438,4 +438,3 @@ class AddressBookSystem {
 // adrees book
 const addressBookSystem = new AddressBookSystem();
 addressBookSystem.menu();
-console.log("Hlo");
