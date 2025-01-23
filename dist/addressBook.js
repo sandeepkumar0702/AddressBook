@@ -1,28 +1,67 @@
-"use strict";
-const readlineSync = require('readline-sync');
-class Contact {
-    firstName;
-    lastName;
-    address;
-    city;
-    state;
-    zip;
-    phoneNumber;
-    email;
-    constructor(firstName, lastName, address, city, state, zip, phoneNumber, email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
+import * as readline from "readline-sync";
+class AddressBook {
+    contacts;
+    constructor() {
+        this.contacts = [];
+    }
+    addContact() {
+        console.log("\nEnter Contact Details:");
+        const firstName = readline.question("First Name: ");
+        const lastName = readline.question("Last Name: ");
+        const address = readline.question("Address: ");
+        const city = readline.question("City: ");
+        const state = readline.question("State: ");
+        const zip = readline.question("ZIP Code: ");
+        const phoneNumber = readline.question("Phone Number (10 digits): ");
+        const email = readline.question("Email: ");
+        const contact = {
+            firstName,
+            lastName,
+            address,
+            city,
+            state,
+            zip,
+            phoneNumber,
+            email,
+        };
+        this.contacts.push(contact);
+        console.log("Contact added successfully!");
+    }
+    displayContacts() {
+        if (this.contacts.length === 0) {
+            console.log("No contacts available.");
+        }
+        else {
+            console.log("\nContacts List:");
+            this.contacts.forEach((contact, index) => {
+                console.log(`
+          ${index + 1}. ${contact.firstName} ${contact.lastName}, Address: ${contact.address}, ${contact.city}, ${contact.state}, ${contact.zip}, Phone: ${contact.phoneNumber}, Email: ${contact.email}
+        `);
+            });
+        }
+    }
+    menu() {
+        while (true) {
+            console.log("\nAddress Book Menu:");
+            console.log("1. Add Contact");
+            console.log("2. Display Contacts");
+            console.log("3. Exit");
+            const choice = readline.question("Enter your choice: ");
+            switch (choice) {
+                case "1":
+                    this.addContact();
+                    break;
+                case "2":
+                    this.displayContacts();
+                    break;
+                case "3":
+                    console.log("Exiting Address Book. Goodbye!");
+                    process.exit(0);
+                default:
+                    console.log("Invalid choice. Please try again.");
+            }
+        }
     }
 }
-// AddressBook
-class AddressBook {
-    contacts = [];
-}
 const addressBook = new AddressBook();
-console.log(addressBook);
+addressBook.menu();
