@@ -209,12 +209,12 @@ class AddressBookSystem {
       }
     }
   }
-  // Search for a person in a city or state across the multiple address books
+  // Search for a person in a city or state 
   searchPersonInCityOrState(): void {
     const city = readline.question("Enter city (or leave blank): ").trim();
     const state = readline.question("Enter state (or leave blank): ").trim();
 
-    // Ensure either a city or state is provided for the search
+    // Ensure either a city or state 
     if (!city && !state) {
       console.log("You must enter a city or state.");
       return;
@@ -223,7 +223,7 @@ class AddressBookSystem {
     console.log("\nSearching for contacts...");
     let foundContacts: Contact[] = [];
 
-    // Search across all address books for matching contacts
+    // Search across all address books 
     this.addressBooks.forEach((addressBook, name) => {
       const results = addressBook.searchContactsByCityOrState(city, state);
       if (results.length > 0) {
@@ -243,37 +243,98 @@ class AddressBookSystem {
       console.log("\nSearch completed.");
     }
   }
-
-  // Main menu to drive the system operations
-  menu(): void {
-    while (true) {
-      console.log("\nAddress Book System Menu:");
-      console.log("1. Add Address Book");
-      console.log("2. Select Address Book");
-      console.log("3. Search Person in City or State");
-      console.log("4. Exit");
-
-      const choice: string = readline.question("Enter your choice: ");
-
-      switch (choice) {
-        case "1":
-          this.addAddressBook();
-          break;
-        case "2":
-          this.selectAddressBook();
-          break;
-        case "3":
-          this.searchPersonInCityOrState();
-          break;
-        case "4":
-          console.log("Exiting Address Book System. Goodbye!");
-          process.exit(0);
-        default:
-          console.log("Invalid choice. Please try again.");
+  viewPersonsByCityOrState(): void {
+      const choice = readline.question("\nView persons grouped by (1) City or (2) State: ").trim();
+      if (choice === "1") {
+        this.groupAndDisplayPersonsByCity();
+      } 
+      else if (choice === "2") {
+        this.groupAndDisplayPersonsByState();
+      } 
+      else {
+        console.log("Invalid choice. Please try again.");
       }
-    }
   }
-}
-
+  
+    //group and display persons by city
+  private groupAndDisplayPersonsByCity(): void {
+      const cityGroups: Map<string, Contact[]> = new Map();
+  
+      this.addressBooks.forEach((addressBook) => {
+        addressBook["contacts"].forEach((contact) => {
+          if (!cityGroups.has(contact.city)) {
+            cityGroups.set(contact.city, []);
+          }
+          cityGroups.get(contact.city)!.push(contact);
+        });
+      });
+  
+      console.log("\nContacts Grouped by City:");
+      cityGroups.forEach((contacts, city) => {
+        console.log(`\nCity: ${city}`);
+        contacts.forEach((contact) =>
+          console.log(`- ${contact.firstName} ${contact.lastName}`)
+        );
+      });
+  }
+  
+    //  group and display persons by state
+  private groupAndDisplayPersonsByState(): void {
+      const stateGroups: Map<string, Contact[]> = new Map();
+  
+      this.addressBooks.forEach((addressBook) => {
+        addressBook["contacts"].forEach((contact) => {
+          if (!stateGroups.has(contact.state)) {
+            stateGroups.set(contact.state, []);
+          }
+          stateGroups.get(contact.state)!.push(contact);
+        });
+      });
+  
+      console.log("\nContacts Grouped by State:");
+      stateGroups.forEach((contacts, state) => {
+        console.log(`\nState: ${state}`);
+        contacts.forEach((contact) =>
+          console.log(`- ${contact.firstName} ${contact.lastName}`)
+        );
+      });
+  }
+  
+    // Main menu
+  menu(): void {
+      while (true) {
+        console.log("\nAddress Book System Menu:");
+        console.log("1. Add Address Book");
+        console.log("2. Select Address Book");
+        console.log("3. Search Person in City or State");
+        console.log("4. View Persons by City or State"); // New menu option
+        console.log("5. Exit");
+  
+        const choice: string = readline.question("Enter your choice: ");
+  
+        switch (choice) {
+          case "1":
+            this.addAddressBook();
+            break;
+          case "2":
+            this.selectAddressBook();
+            break;
+          case "3":
+            this.searchPersonInCityOrState();
+            break;
+          case "4":
+            this.viewPersonsByCityOrState(); // Added menu option handling
+            break;
+          case "5":
+            console.log("Exiting Address Book System. Goodbye!");
+            process.exit(0);
+          default:
+            console.log("Invalid choice. Please try again.");
+        }
+      }
+  }
+  }
+  
+  //  address book system
 const addressBookSystem = new AddressBookSystem();
 addressBookSystem.menu();

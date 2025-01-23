@@ -174,14 +174,61 @@ class AddressBookSystem {
             console.log("\nSearch completed.");
         }
     }
-    // Main menu to drive the system operations
+    viewPersonsByCityOrState() {
+        const choice = readline.question("\nView persons grouped by (1) City or (2) State: ").trim();
+        if (choice === "1") {
+            this.groupAndDisplayPersonsByCity();
+        }
+        else if (choice === "2") {
+            this.groupAndDisplayPersonsByState();
+        }
+        else {
+            console.log("Invalid choice. Please try again.");
+        }
+    }
+    // Helper function to group and display persons by city
+    groupAndDisplayPersonsByCity() {
+        const cityGroups = new Map();
+        this.addressBooks.forEach((addressBook) => {
+            addressBook["contacts"].forEach((contact) => {
+                if (!cityGroups.has(contact.city)) {
+                    cityGroups.set(contact.city, []);
+                }
+                cityGroups.get(contact.city).push(contact);
+            });
+        });
+        console.log("\nContacts Grouped by City:");
+        cityGroups.forEach((contacts, city) => {
+            console.log(`\nCity: ${city}`);
+            contacts.forEach((contact) => console.log(`- ${contact.firstName} ${contact.lastName}`));
+        });
+    }
+    // Helper function to group and display persons by state
+    groupAndDisplayPersonsByState() {
+        const stateGroups = new Map();
+        this.addressBooks.forEach((addressBook) => {
+            addressBook["contacts"].forEach((contact) => {
+                if (!stateGroups.has(contact.state)) {
+                    stateGroups.set(contact.state, []);
+                }
+                stateGroups.get(contact.state).push(contact);
+            });
+        });
+        console.log("\nContacts Grouped by State:");
+        stateGroups.forEach((contacts, state) => {
+            console.log(`\nState: ${state}`);
+            contacts.forEach((contact) => console.log(`- ${contact.firstName} ${contact.lastName}`));
+        });
+    }
+    // Main menu
     menu() {
         while (true) {
             console.log("\nAddress Book System Menu:");
             console.log("1. Add Address Book");
             console.log("2. Select Address Book");
             console.log("3. Search Person in City or State");
-            console.log("4. Exit");
+            console.log("4. View Persons by City or State"); // New menu option
+            console.log("5. Exit");
             const choice = readline.question("Enter your choice: ");
             switch (choice) {
                 case "1":
@@ -194,6 +241,9 @@ class AddressBookSystem {
                     this.searchPersonInCityOrState();
                     break;
                 case "4":
+                    this.viewPersonsByCityOrState(); // Added menu option handling
+                    break;
+                case "5":
                     console.log("Exiting Address Book System. Goodbye!");
                     process.exit(0);
                 default:
@@ -202,5 +252,6 @@ class AddressBookSystem {
         }
     }
 }
+// Instantiate and launch the address book system
 const addressBookSystem = new AddressBookSystem();
 addressBookSystem.menu();
