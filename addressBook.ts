@@ -18,6 +18,7 @@ class AddressBook {
     this.contacts = [];
   }
 
+  // Add a new contact
   addContact(): void {
     console.log("\nEnter Contact Details:");
     const firstName = readline.question("First Name: ");
@@ -44,6 +45,7 @@ class AddressBook {
     console.log("Contact added successfully!");
   }
 
+  // Display all contacts
   displayContacts(): void {
     if (this.contacts.length === 0) {
       console.log("No contacts available.");
@@ -57,12 +59,56 @@ class AddressBook {
     }
   }
 
+  // Edit an existing contact
+  editContact(): void {
+    const nameToSearch = readline.question(
+      "\nEnter the first name of the contact you want to edit: "
+    );
+    const contact = this.contacts.find(
+      (c) => c.firstName.toLowerCase() === nameToSearch.toLowerCase()
+    );
+
+    if (contact) {
+      console.log("\nEditing Contact:");
+      contact.firstName = readline.question(
+        `First Name (${contact.firstName}): `, { defaultInput: contact.firstName }
+      ) || contact.firstName;
+      contact.lastName = readline.question(
+        `Last Name (${contact.lastName}): `, { defaultInput: contact.lastName }
+      ) || contact.lastName;
+      contact.address = readline.question(
+        `Address (${contact.address}): `, { defaultInput: contact.address }
+      ) || contact.address;
+      contact.city = readline.question(
+        `City (${contact.city}): `, { defaultInput: contact.city }
+      ) || contact.city;
+      contact.state = readline.question(
+        `State (${contact.state}): `, { defaultInput: contact.state }
+      ) || contact.state;
+      contact.zip = readline.question(
+        `ZIP Code (${contact.zip}): `, { defaultInput: contact.zip }
+      ) || contact.zip;
+      contact.phoneNumber = readline.question(
+        `Phone Number (${contact.phoneNumber}): `, { defaultInput: contact.phoneNumber }
+      ) || contact.phoneNumber;
+      contact.email = readline.question(
+        `Email (${contact.email}): `, { defaultInput: contact.email }
+      ) || contact.email;
+
+      console.log("Contact updated successfully!");
+    } else {
+      console.log("Contact not found.");
+    }
+  }
+
+  // Menu-driven interface
   menu(): void {
     while (true) {
       console.log("\nAddress Book Menu:");
       console.log("1. Add Contact");
       console.log("2. Display Contacts");
-      console.log("3. Exit");
+      console.log("3. Edit Contact");
+      console.log("4. Exit");
 
       const choice: string = readline.question("Enter your choice: ");
 
@@ -74,6 +120,9 @@ class AddressBook {
           this.displayContacts();
           break;
         case "3":
+          this.editContact();
+          break;
+        case "4":
           console.log("Exiting Address Book. Goodbye!");
           process.exit(0);
         default:
