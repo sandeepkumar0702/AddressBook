@@ -107,6 +107,20 @@ class AddressBook {
         console.log("\nContacts sorted alphabetically by name:");
         this.displayContacts();
     }
+    //sort by city zip state
+    sortContacts(criteria) {
+        if (this.contacts.length === 0) {
+            console.log("No contacts available to sort.");
+            return;
+        }
+        this.contacts.sort((a, b) => {
+            const valueA = a[criteria].toLowerCase();
+            const valueB = b[criteria].toLowerCase();
+            return valueA.localeCompare(valueB); // Compare alphabetically by the given criteria
+        });
+        console.log(`\nContacts sorted by ${criteria.charAt(0).toUpperCase() + criteria.slice(1)}:`);
+        this.displayContacts();
+    }
 }
 class AddressBookSystem {
     addressBooks;
@@ -122,46 +136,6 @@ class AddressBookSystem {
         }
         this.addressBooks.set(name, new AddressBook());
         console.log(`Address book '${name}' created successfully!`);
-    }
-    // Select an address book 
-    selectAddressBook() {
-        const name = readline.question("\nEnter the name of the address book you want to access: ");
-        const addressBook = this.addressBooks.get(name);
-        if (!addressBook) {
-            console.log("Address book not found.");
-            return;
-        }
-        while (true) {
-            console.log(`\nAddress Book: ${name}`);
-            console.log("1. Add Contacts");
-            console.log("2. Display Contacts");
-            console.log("3. Edit Contact");
-            console.log("4. Delete Contact");
-            console.log("5. Sort Contacts by Name"); // New option for sorting
-            console.log("6. Go Back");
-            const choice = readline.question("Enter your choice: ");
-            switch (choice) {
-                case "1":
-                    addressBook.addContacts();
-                    break;
-                case "2":
-                    addressBook.displayContacts();
-                    break;
-                case "3":
-                    addressBook.editContact();
-                    break;
-                case "4":
-                    addressBook.deleteContact();
-                    break;
-                case "5":
-                    addressBook.sortContactsByName(); // Call sorting method
-                    break;
-                case "6":
-                    return;
-                default:
-                    console.log("Invalid choice. Please try again.");
-            }
-        }
     }
     // Search for a person in a city or state 
     searchPersonInCityOrState() {
@@ -278,6 +252,58 @@ class AddressBookSystem {
         stateCounts.forEach((count, state) => {
             console.log(`State: ${state}, Count: ${count}`);
         });
+    }
+    // Select an address book 
+    selectAddressBook() {
+        const name = readline.question("\nEnter the name of the address book you want to access: ");
+        const addressBook = this.addressBooks.get(name);
+        if (!addressBook) {
+            console.log("Address book not found.");
+            return;
+        }
+        while (true) {
+            console.log(`\nAddress Book: ${name}`);
+            console.log("1. Add Contacts");
+            console.log("2. Display Contacts");
+            console.log("3. Edit Contact");
+            console.log("4. Delete Contact");
+            console.log("5. Sort Contacts by Name");
+            console.log("6. Sort Contacts by City");
+            console.log("7. Sort Contacts by State");
+            console.log("8. Sort Contacts by Zip");
+            console.log("9. Go Back");
+            const choice = readline.question("Enter your choice: ");
+            switch (choice) {
+                case "1":
+                    addressBook.addContacts();
+                    break;
+                case "2":
+                    addressBook.displayContacts();
+                    break;
+                case "3":
+                    addressBook.editContact();
+                    break;
+                case "4":
+                    addressBook.deleteContact();
+                    break;
+                case "5":
+                    addressBook.sortContactsByName();
+                    break;
+                case "6":
+                    addressBook.sortContacts("city");
+                    break;
+                case "7":
+                    addressBook.sortContacts("state");
+                    break;
+                case "8":
+                    addressBook.sortContacts("zip");
+                    break;
+                case "9":
+                    return;
+                default:
+                    console.log("Invalid choice. Please try again.");
+            }
+        }
     }
     // Main menu w
     menu() {
