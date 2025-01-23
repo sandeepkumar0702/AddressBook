@@ -11,6 +11,13 @@ class AddressBook {
             console.log("\nEnter Contact Details:");
             const firstName = readline.question("First Name: ");
             const lastName = readline.question("Last Name: ");
+            // Check for duplicates
+            const duplicate = this.contacts.some((contact) => contact.firstName.toLowerCase() === firstName.toLowerCase() &&
+                contact.lastName.toLowerCase() === lastName.toLowerCase());
+            if (duplicate) {
+                console.log("A contact with this name already exists. Please try again.");
+                continue; // Skip adding this contact
+            }
             const address = readline.question("Address: ");
             const city = readline.question("City: ");
             const state = readline.question("State: ");
