@@ -101,6 +101,25 @@ class AddressBook {
     }
   }
 
+  // Delete a contact
+  deleteContact(): void {
+    const nameToDelete = readline.question(
+      "\nEnter the first name of the contact you want to delete: "
+    );
+
+    const initialLength = this.contacts.length;
+
+    this.contacts = this.contacts.filter(
+      (c) => c.firstName.toLowerCase() !== nameToDelete.toLowerCase()
+    );
+
+    if (this.contacts.length < initialLength) {
+      console.log("Contact deleted successfully!");
+    } else {
+      console.log("Contact not found.");
+    }
+  }
+
   // Menu-driven interface
   menu(): void {
     while (true) {
@@ -108,7 +127,8 @@ class AddressBook {
       console.log("1. Add Contact");
       console.log("2. Display Contacts");
       console.log("3. Edit Contact");
-      console.log("4. Exit");
+      console.log("4. Delete Contact");
+      console.log("5. Exit");
 
       const choice: string = readline.question("Enter your choice: ");
 
@@ -123,6 +143,9 @@ class AddressBook {
           this.editContact();
           break;
         case "4":
+          this.deleteContact();
+          break;
+        case "5":
           console.log("Exiting Address Book. Goodbye!");
           process.exit(0);
         default:
