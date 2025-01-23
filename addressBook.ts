@@ -278,7 +278,7 @@ class AddressBookSystem {
       });
   }
   
-    //  group and display persons by state
+    // group and display persons by state
   private groupAndDisplayPersonsByState(): void {
       const stateGroups: Map<string, Contact[]> = new Map();
   
@@ -299,42 +299,90 @@ class AddressBookSystem {
         );
       });
   }
-  
-    // Main menu
+  //count by city
+  countPersonsByCityOrState(): void {
+    const choice = readline
+      .question("\nCount contacts grouped by (1) City or (2) State: ")
+      .trim();
+
+    if (choice === "1") {
+      this.countAndDisplayByCity();
+    } else if (choice === "2") {
+      this.countAndDisplayByState();
+    } else {
+      console.log("Invalid choice. Please try again.");
+    }
+  }
+  //count and display contacts by city
+  private countAndDisplayByCity(): void {
+    const cityCounts: Map<string, number> = new Map();
+
+    this.addressBooks.forEach((addressBook) => {
+      addressBook["contacts"].forEach((contact) => {
+        cityCounts.set(contact.city, (cityCounts.get(contact.city) || 0) + 1);
+      });
+    });
+
+    console.log("\nContact Counts by City:");
+    cityCounts.forEach((count, city) => {
+      console.log(`City: ${city}, Count: ${count}`);
+    });
+  }
+
+  //count and display contacts by state
+  private countAndDisplayByState(): void {
+    const stateCounts: Map<string, number> = new Map();
+
+    this.addressBooks.forEach((addressBook) => {
+      addressBook["contacts"].forEach((contact) => {
+        stateCounts.set(contact.state, (stateCounts.get(contact.state) || 0) + 1);
+      });
+    });
+
+    console.log("\nContact Counts by State:");
+    stateCounts.forEach((count, state) => {
+      console.log(`State: ${state}, Count: ${count}`);
+    });
+  }
+  // Main menu w
   menu(): void {
-      while (true) {
-        console.log("\nAddress Book System Menu:");
-        console.log("1. Add Address Book");
-        console.log("2. Select Address Book");
-        console.log("3. Search Person in City or State");
-        console.log("4. View Persons by City or State"); // New menu option
-        console.log("5. Exit");
-  
-        const choice: string = readline.question("Enter your choice: ");
-  
-        switch (choice) {
-          case "1":
-            this.addAddressBook();
-            break;
-          case "2":
-            this.selectAddressBook();
-            break;
-          case "3":
-            this.searchPersonInCityOrState();
-            break;
-          case "4":
-            this.viewPersonsByCityOrState(); // Added menu option handling
-            break;
-          case "5":
-            console.log("Exiting Address Book System. Goodbye!");
-            process.exit(0);
-          default:
-            console.log("Invalid choice. Please try again.");
-        }
+    while (true) {
+      console.log("\nAddress Book System Menu:");
+      console.log("1. Add Address Book");
+      console.log("2. Select Address Book");
+      console.log("3. Search Person in City or State");
+      console.log("4. View Persons by City or State");
+      console.log("5. Count Persons by City or State"); // New menu option
+      console.log("6. Exit");
+
+      const choice: string = readline.question("Enter your choice: ");
+
+      switch (choice) {
+        case "1":
+          this.addAddressBook();
+          break;
+        case "2":
+          this.selectAddressBook();
+          break;
+        case "3":
+          this.searchPersonInCityOrState();
+          break;
+        case "4":
+          this.viewPersonsByCityOrState();
+          break;
+        case "5":
+          this.countPersonsByCityOrState(); // New option handling
+          break;
+        case "6":
+          console.log("Exiting Address Book System. Goodbye!");
+          process.exit(0);
+        default:
+          console.log("Invalid choice. Please try again.");
       }
+    }
   }
-  }
-  
-  //  address book system
+}
+
+// adrees book
 const addressBookSystem = new AddressBookSystem();
 addressBookSystem.menu();

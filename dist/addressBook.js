@@ -203,7 +203,7 @@ class AddressBookSystem {
             contacts.forEach((contact) => console.log(`- ${contact.firstName} ${contact.lastName}`));
         });
     }
-    //  group and display persons by state
+    // group and display persons by state
     groupAndDisplayPersonsByState() {
         const stateGroups = new Map();
         this.addressBooks.forEach((addressBook) => {
@@ -220,7 +220,7 @@ class AddressBookSystem {
             contacts.forEach((contact) => console.log(`- ${contact.firstName} ${contact.lastName}`));
         });
     }
-    // Count the number of contact persons by city or state
+    //count by city
     countPersonsByCityOrState() {
         const choice = readline
             .question("\nCount contacts grouped by (1) City or (2) State: ")
@@ -235,7 +235,7 @@ class AddressBookSystem {
             console.log("Invalid choice. Please try again.");
         }
     }
-    // Helper function to count and display contacts by city
+    //count and display contacts by city
     countAndDisplayByCity() {
         const cityCounts = new Map();
         this.addressBooks.forEach((addressBook) => {
@@ -248,7 +248,7 @@ class AddressBookSystem {
             console.log(`City: ${city}, Count: ${count}`);
         });
     }
-    // Helper function to count and display contacts by state
+    //count and display contacts by state
     countAndDisplayByState() {
         const stateCounts = new Map();
         this.addressBooks.forEach((addressBook) => {
@@ -261,7 +261,7 @@ class AddressBookSystem {
             console.log(`State: ${state}, Count: ${count}`);
         });
     }
-    // Main menu 
+    // Main menu w
     menu() {
         while (true) {
             console.log("\nAddress Book System Menu:");
@@ -297,6 +297,6 @@ class AddressBookSystem {
         }
     }
 }
-// addressBook
+// adrees book
 const addressBookSystem = new AddressBookSystem();
 addressBookSystem.menu();
