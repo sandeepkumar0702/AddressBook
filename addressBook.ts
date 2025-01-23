@@ -21,31 +21,31 @@ class AddressBook {
   // Add one or more contacts
   addContacts(): void {
     console.log("\nAdd Multiple Contacts:");
-  
+
     while (true) {
       console.log("\nEnter Contact Details:");
       const firstName = readline.question("First Name: ");
       const lastName = readline.question("Last Name: ");
-  
+
       // Check for duplicates
       const duplicate = this.contacts.some(
         (contact) =>
           contact.firstName.toLowerCase() === firstName.toLowerCase() &&
           contact.lastName.toLowerCase() === lastName.toLowerCase()
       );
-  
+
       if (duplicate) {
         console.log("A contact with this name already exists. Please try again.");
         continue; // Skip adding this contact
       }
-  
+
       const address = readline.question("Address: ");
       const city = readline.question("City: ");
       const state = readline.question("State: ");
       const zip = readline.question("ZIP Code: ");
       const phoneNumber = readline.question("Phone Number (10 digits): ");
       const email = readline.question("Email: ");
-  
+
       const contact: Contact = {
         firstName,
         lastName,
@@ -56,10 +56,10 @@ class AddressBook {
         phoneNumber,
         email,
       };
-  
+
       this.contacts.push(contact);
       console.log("Contact added successfully!");
-  
+
       const addAnother = readline
         .question("Do you want to add another contact? (yes/no): ")
         .toLowerCase();
@@ -74,68 +74,18 @@ class AddressBook {
     } else {
       console.log("\nContacts List:");
       this.contacts.forEach((contact, index) => {
-        console.log(`
-          ${index + 1}. ${contact.firstName} ${contact.lastName}, Address: ${contact.address}, ${contact.city}, ${contact.state}, ${contact.zip}, Phone: ${contact.phoneNumber}, Email: ${contact.email}
-        `);
+        console.log(` ${index + 1}. ${contact.firstName} ${contact.lastName}, Address: ${contact.address}, ${contact.city}, ${contact.state}, ${contact.zip}, Phone: ${contact.phoneNumber}, Email: ${contact.email}`);
       });
     }
   }
 
-  // Edit an existing contact
-  editContact(): void {
-    const nameToSearch = readline.question(
-      "\nEnter the first name of the contact you want to edit: "
+  // Find all contacts in a city or state
+  findContactsByCityOrState(city: string, state: string): Contact[] {
+    return this.contacts.filter(
+      (contact) =>
+        contact.city.toLowerCase() === city.toLowerCase() ||
+        contact.state.toLowerCase() === state.toLowerCase()
     );
-    const contact = this.contacts.find(
-      (c) => c.firstName.toLowerCase() === nameToSearch.toLowerCase()
-    );
-
-    if (contact) {
-      console.log("\nEditing Contact:");
-      contact.firstName = readline.question(
-        `First Name (${contact.firstName}): `
-      ) || contact.firstName;
-      contact.lastName = readline.question(
-        `Last Name (${contact.lastName}): `
-      ) || contact.lastName;
-      contact.address = readline.question(
-        `Address (${contact.address}): `
-      ) || contact.address;
-      contact.city = readline.question(`City (${contact.city}): `) || contact.city;
-      contact.state = readline.question(
-        `State (${contact.state}): `
-      ) || contact.state;
-      contact.zip = readline.question(`ZIP Code (${contact.zip}): `) || contact.zip;
-      contact.phoneNumber = readline.question(
-        `Phone Number (${contact.phoneNumber}): `
-      ) || contact.phoneNumber;
-      contact.email = readline.question(
-        `Email (${contact.email}): `
-      ) || contact.email;
-
-      console.log("Contact updated successfully!");
-    } else {
-      console.log("Contact not found.");
-    }
-  }
-
-  // Delete a contact
-  deleteContact(): void {
-    const nameToDelete = readline.question(
-      "\nEnter the first name of the contact you want to delete: "
-    );
-
-    const initialLength = this.contacts.length;
-
-    this.contacts = this.contacts.filter(
-      (c) => c.firstName.toLowerCase() !== nameToDelete.toLowerCase()
-    );
-
-    if (this.contacts.length < initialLength) {
-      console.log("Contact deleted successfully!");
-    } else {
-      console.log("Contact not found.");
-    }
   }
 }
 
@@ -176,9 +126,7 @@ class AddressBookSystem {
       console.log(`\nAddress Book: ${name}`);
       console.log("1. Add Contacts");
       console.log("2. Display Contacts");
-      console.log("3. Edit Contact");
-      console.log("4. Delete Contact");
-      console.log("5. Go Back");
+      console.log("3. Go Back");
 
       const choice: string = readline.question("Enter your choice: ");
 
@@ -190,16 +138,41 @@ class AddressBookSystem {
           addressBook.displayContacts();
           break;
         case "3":
-          addressBook.editContact();
-          break;
-        case "4":
-          addressBook.deleteContact();
-          break;
-        case "5":
           return;
         default:
           console.log("Invalid choice. Please try again.");
       }
+    }
+  }
+
+  // Search for a person in a city or state across all address books
+  searchPersonInCityOrState(): void {
+    const searchCity = readline.question("\nEnter the city to search (leave blank if not applicable): ");
+    const searchState = readline.question("Enter the state to search (leave blank if not applicable): ");
+
+    if (!searchCity && !searchState) {
+      console.log("You must specify at least a city or a state.");
+      return;
+    }
+
+    console.log("\nSearching for contacts...");
+    let foundContacts: Contact[] = [];
+
+    this.addressBooks.forEach((addressBook, name) => {
+      const results = addressBook.findContactsByCityOrState(searchCity, searchState);
+      if (results.length > 0) {
+        console.log(`\nIn Address Book '${name}':`);
+        results.forEach((contact) => {
+          console.log(`- ${contact.firstName} ${contact.lastName}, ${contact.city}, ${contact.state}`);
+        });
+        foundContacts = foundContacts.concat(results);
+      }
+    });
+
+    if (foundContacts.length === 0) {
+      console.log("No contacts found in the specified city or state.");
+    } else {
+      console.log("\nSearch complete.");
     }
   }
 
@@ -209,7 +182,8 @@ class AddressBookSystem {
       console.log("\nAddress Book System Menu:");
       console.log("1. Add Address Book");
       console.log("2. Select Address Book");
-      console.log("3. Exit");
+      console.log("3. Search Person in City or State");
+      console.log("4. Exit");
 
       const choice: string = readline.question("Enter your choice: ");
 
@@ -221,6 +195,9 @@ class AddressBookSystem {
           this.selectAddressBook();
           break;
         case "3":
+          this.searchPersonInCityOrState();
+          break;
+        case "4":
           console.log("Exiting Address Book System. Goodbye!");
           process.exit(0);
         default:
