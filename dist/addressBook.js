@@ -4,29 +4,38 @@ class AddressBook {
     constructor() {
         this.contacts = [];
     }
-    // Add a new contact
-    addContact() {
-        console.log("\nEnter Contact Details:");
-        const firstName = readline.question("First Name: ");
-        const lastName = readline.question("Last Name: ");
-        const address = readline.question("Address: ");
-        const city = readline.question("City: ");
-        const state = readline.question("State: ");
-        const zip = readline.question("ZIP Code: ");
-        const phoneNumber = readline.question("Phone Number (10 digits): ");
-        const email = readline.question("Email: ");
-        const contact = {
-            firstName,
-            lastName,
-            address,
-            city,
-            state,
-            zip,
-            phoneNumber,
-            email,
-        };
-        this.contacts.push(contact);
-        console.log("Contact added successfully!");
+    // Add one or more contacts
+    addContacts() {
+        console.log("\nAdd Multiple Contacts:");
+        while (true) {
+            console.log("\nEnter Contact Details:");
+            const firstName = readline.question("First Name: ");
+            const lastName = readline.question("Last Name: ");
+            const address = readline.question("Address: ");
+            const city = readline.question("City: ");
+            const state = readline.question("State: ");
+            const zip = readline.question("ZIP Code: ");
+            const phoneNumber = readline.question("Phone Number (10 digits): ");
+            const email = readline.question("Email: ");
+            const contact = {
+                firstName,
+                lastName,
+                address,
+                city,
+                state,
+                zip,
+                phoneNumber,
+                email,
+            };
+            this.contacts.push(contact);
+            console.log("Contact added successfully!");
+            // Ask if the user wants to add another contact
+            const addAnother = readline
+                .question("Do you want to add another contact? (yes/no): ")
+                .toLowerCase();
+            if (addAnother !== "yes")
+                break;
+        }
     }
     // Display all contacts
     displayContacts() {
@@ -48,21 +57,21 @@ class AddressBook {
         const contact = this.contacts.find((c) => c.firstName.toLowerCase() === nameToSearch.toLowerCase());
         if (contact) {
             console.log("\nEditing Contact:");
-            contact.firstName = readline.question(`First Name (${contact.firstName}): `, { defaultInput: contact.firstName }) || contact.firstName;
-            contact.lastName = readline.question(`Last Name (${contact.lastName}): `, { defaultInput: contact.lastName }) || contact.lastName;
-            contact.address = readline.question(`Address (${contact.address}): `, { defaultInput: contact.address }) || contact.address;
-            contact.city = readline.question(`City (${contact.city}): `, { defaultInput: contact.city }) || contact.city;
-            contact.state = readline.question(`State (${contact.state}): `, { defaultInput: contact.state }) || contact.state;
-            contact.zip = readline.question(`ZIP Code (${contact.zip}): `, { defaultInput: contact.zip }) || contact.zip;
-            contact.phoneNumber = readline.question(`Phone Number (${contact.phoneNumber}): `, { defaultInput: contact.phoneNumber }) || contact.phoneNumber;
-            contact.email = readline.question(`Email (${contact.email}): `, { defaultInput: contact.email }) || contact.email;
+            contact.firstName = readline.question(`First Name (${contact.firstName}): `) || contact.firstName;
+            contact.lastName = readline.question(`Last Name (${contact.lastName}): `) || contact.lastName;
+            contact.address = readline.question(`Address (${contact.address}): `) || contact.address;
+            contact.city = readline.question(`City (${contact.city}): `) || contact.city;
+            contact.state = readline.question(`State (${contact.state}): `) || contact.state;
+            contact.zip = readline.question(`ZIP Code (${contact.zip}): `) || contact.zip;
+            contact.phoneNumber = readline.question(`Phone Number (${contact.phoneNumber}): `) || contact.phoneNumber;
+            contact.email = readline.question(`Email (${contact.email}): `) || contact.email;
             console.log("Contact updated successfully!");
         }
         else {
             console.log("Contact not found.");
         }
     }
-    // Delete a contact
+    // Delete a contact using the filter method
     deleteContact() {
         const nameToDelete = readline.question("\nEnter the first name of the contact you want to delete: ");
         const initialLength = this.contacts.length;
@@ -78,7 +87,7 @@ class AddressBook {
     menu() {
         while (true) {
             console.log("\nAddress Book Menu:");
-            console.log("1. Add Contact");
+            console.log("1. Add Contacts");
             console.log("2. Display Contacts");
             console.log("3. Edit Contact");
             console.log("4. Delete Contact");
@@ -86,7 +95,7 @@ class AddressBook {
             const choice = readline.question("Enter your choice: ");
             switch (choice) {
                 case "1":
-                    this.addContact();
+                    this.addContacts();
                     break;
                 case "2":
                     this.displayContacts();

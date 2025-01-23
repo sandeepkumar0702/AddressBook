@@ -18,31 +18,41 @@ class AddressBook {
     this.contacts = [];
   }
 
-  // Add a new contact
-  addContact(): void {
-    console.log("\nEnter Contact Details:");
-    const firstName = readline.question("First Name: ");
-    const lastName = readline.question("Last Name: ");
-    const address = readline.question("Address: ");
-    const city = readline.question("City: ");
-    const state = readline.question("State: ");
-    const zip = readline.question("ZIP Code: ");
-    const phoneNumber = readline.question("Phone Number (10 digits): ");
-    const email = readline.question("Email: ");
+  // Add one or more contacts
+  addContacts(): void {
+    console.log("\nAdd Multiple Contacts:");
 
-    const contact: Contact = {
-      firstName,
-      lastName,
-      address,
-      city,
-      state,
-      zip,
-      phoneNumber,
-      email,
-    };
+    while (true) {
+      console.log("\nEnter Contact Details:");
+      const firstName = readline.question("First Name: ");
+      const lastName = readline.question("Last Name: ");
+      const address = readline.question("Address: ");
+      const city = readline.question("City: ");
+      const state = readline.question("State: ");
+      const zip = readline.question("ZIP Code: ");
+      const phoneNumber = readline.question("Phone Number (10 digits): ");
+      const email = readline.question("Email: ");
 
-    this.contacts.push(contact);
-    console.log("Contact added successfully!");
+      const contact: Contact = {
+        firstName,
+        lastName,
+        address,
+        city,
+        state,
+        zip,
+        phoneNumber,
+        email,
+      };
+
+      this.contacts.push(contact);
+      console.log("Contact added successfully!");
+
+      // Ask if the user wants to add another contact
+      const addAnother = readline
+        .question("Do you want to add another contact? (yes/no): ")
+        .toLowerCase();
+      if (addAnother !== "yes") break;
+    }
   }
 
   // Display all contacts
@@ -71,28 +81,28 @@ class AddressBook {
     if (contact) {
       console.log("\nEditing Contact:");
       contact.firstName = readline.question(
-        `First Name (${contact.firstName}): `, { defaultInput: contact.firstName }
+        `First Name (${contact.firstName}): `
       ) || contact.firstName;
       contact.lastName = readline.question(
-        `Last Name (${contact.lastName}): `, { defaultInput: contact.lastName }
+        `Last Name (${contact.lastName}): `
       ) || contact.lastName;
       contact.address = readline.question(
-        `Address (${contact.address}): `, { defaultInput: contact.address }
+        `Address (${contact.address}): `
       ) || contact.address;
       contact.city = readline.question(
-        `City (${contact.city}): `, { defaultInput: contact.city }
+        `City (${contact.city}): `
       ) || contact.city;
       contact.state = readline.question(
-        `State (${contact.state}): `, { defaultInput: contact.state }
+        `State (${contact.state}): `
       ) || contact.state;
       contact.zip = readline.question(
-        `ZIP Code (${contact.zip}): `, { defaultInput: contact.zip }
+        `ZIP Code (${contact.zip}): `
       ) || contact.zip;
       contact.phoneNumber = readline.question(
-        `Phone Number (${contact.phoneNumber}): `, { defaultInput: contact.phoneNumber }
+        `Phone Number (${contact.phoneNumber}): `
       ) || contact.phoneNumber;
       contact.email = readline.question(
-        `Email (${contact.email}): `, { defaultInput: contact.email }
+        `Email (${contact.email}): `
       ) || contact.email;
 
       console.log("Contact updated successfully!");
@@ -101,7 +111,7 @@ class AddressBook {
     }
   }
 
-  // Delete a contact
+  // Delete a contact using the filter method
   deleteContact(): void {
     const nameToDelete = readline.question(
       "\nEnter the first name of the contact you want to delete: "
@@ -124,7 +134,7 @@ class AddressBook {
   menu(): void {
     while (true) {
       console.log("\nAddress Book Menu:");
-      console.log("1. Add Contact");
+      console.log("1. Add Contacts");
       console.log("2. Display Contacts");
       console.log("3. Edit Contact");
       console.log("4. Delete Contact");
@@ -134,7 +144,7 @@ class AddressBook {
 
       switch (choice) {
         case "1":
-          this.addContact();
+          this.addContacts();
           break;
         case "2":
           this.displayContacts();
