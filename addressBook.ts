@@ -56,6 +56,32 @@ class AddressBook {
       });
     }
   }
+
+  menu(): void {
+    while (true) {
+      console.log("\nAddress Book Menu:");
+      console.log("1. Add Contact");
+      console.log("2. Display Contacts");
+      console.log("3. Exit");
+
+      const choice: string = readline.question("Enter your choice: ");
+
+      switch (choice) {
+        case "1":
+          this.addContact();
+          break;
+        case "2":
+          this.displayContacts();
+          break;
+        case "3":
+          console.log("Exiting Address Book. Goodbye!");
+          process.exit(0);
+        default:
+          console.log("Invalid choice. Please try again.");
+      }
+    }
+  }
 }
 
 const addressBook = new AddressBook();
+addressBook.menu();
