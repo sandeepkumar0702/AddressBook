@@ -93,6 +93,20 @@ class AddressBook {
         return this.contacts.filter((contact) => (city && contact.city.toLowerCase() === city.toLowerCase()) ||
             (state && contact.state.toLowerCase() === state.toLowerCase()));
     }
+    // Sort the contacts alphabetically by person's name
+    sortContactsByName() {
+        if (this.contacts.length === 0) {
+            console.log("No contacts available to sort.");
+            return;
+        }
+        this.contacts.sort((a, b) => {
+            const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+            const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+            return nameA.localeCompare(nameB); // Compare names alphabetically
+        });
+        console.log("\nContacts sorted alphabetically by name:");
+        this.displayContacts();
+    }
 }
 class AddressBookSystem {
     addressBooks;
@@ -109,7 +123,7 @@ class AddressBookSystem {
         this.addressBooks.set(name, new AddressBook());
         console.log(`Address book '${name}' created successfully!`);
     }
-    // Select an address book and perform operations
+    // Select an address book 
     selectAddressBook() {
         const name = readline.question("\nEnter the name of the address book you want to access: ");
         const addressBook = this.addressBooks.get(name);
@@ -123,7 +137,8 @@ class AddressBookSystem {
             console.log("2. Display Contacts");
             console.log("3. Edit Contact");
             console.log("4. Delete Contact");
-            console.log("5. Go Back");
+            console.log("5. Sort Contacts by Name"); // New option for sorting
+            console.log("6. Go Back");
             const choice = readline.question("Enter your choice: ");
             switch (choice) {
                 case "1":
@@ -139,6 +154,9 @@ class AddressBookSystem {
                     addressBook.deleteContact();
                     break;
                 case "5":
+                    addressBook.sortContactsByName(); // Call sorting method
+                    break;
+                case "6":
                     return;
                 default:
                     console.log("Invalid choice. Please try again.");
