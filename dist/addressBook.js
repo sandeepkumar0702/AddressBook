@@ -89,6 +89,10 @@ class AddressBook {
             console.log("Contact not found.");
         }
     }
+    searchContactsByCityOrState(city, state) {
+        return this.contacts.filter((contact) => (city && contact.city.toLowerCase() === city.toLowerCase()) ||
+            (state && contact.state.toLowerCase() === state.toLowerCase()));
+    }
 }
 class AddressBookSystem {
     addressBooks;
@@ -141,13 +145,43 @@ class AddressBookSystem {
             }
         }
     }
-    // Menu-driven interface
+    // Search for a person in a city or state across the multiple address books
+    searchPersonInCityOrState() {
+        const city = readline.question("Enter city (or leave blank): ").trim();
+        const state = readline.question("Enter state (or leave blank): ").trim();
+        // Ensure either a city or state is provided for the search
+        if (!city && !state) {
+            console.log("You must enter a city or state.");
+            return;
+        }
+        console.log("\nSearching for contacts...");
+        let foundContacts = [];
+        // Search across all address books for matching contacts
+        this.addressBooks.forEach((addressBook, name) => {
+            const results = addressBook.searchContactsByCityOrState(city, state);
+            if (results.length > 0) {
+                console.log(`\nContacts in Address Book '${name}':`);
+                results.forEach((contact) => {
+                    console.log(`- ${contact.firstName} ${contact.lastName}, City: ${contact.city}, State: ${contact.state}`);
+                });
+                foundContacts = foundContacts.concat(results);
+            }
+        });
+        if (foundContacts.length === 0) {
+            console.log("No contacts found in the specified city or state.");
+        }
+        else {
+            console.log("\nSearch completed.");
+        }
+    }
+    // Main menu to drive the system operations
     menu() {
         while (true) {
             console.log("\nAddress Book System Menu:");
             console.log("1. Add Address Book");
             console.log("2. Select Address Book");
-            console.log("3. Exit");
+            console.log("3. Search Person in City or State");
+            console.log("4. Exit");
             const choice = readline.question("Enter your choice: ");
             switch (choice) {
                 case "1":
@@ -157,6 +191,9 @@ class AddressBookSystem {
                     this.selectAddressBook();
                     break;
                 case "3":
+                    this.searchPersonInCityOrState();
+                    break;
+                case "4":
                     console.log("Exiting Address Book System. Goodbye!");
                     process.exit(0);
                 default:
