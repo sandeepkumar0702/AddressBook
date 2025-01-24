@@ -1,5 +1,5 @@
 import * as readline from "readline-sync";
-
+import * as fs from "fs";
 interface Contact {
   firstName: string;
   lastName: string;
@@ -176,6 +176,15 @@ class AddressBook {
 
     console.log(`\nContacts sorted by ${criteria.charAt(0).toUpperCase() + criteria.slice(1)}:`);
     this.displayContacts();
+  }
+  saveToFile(fileName: string): void {
+    try {
+      const data = JSON.stringify(this.contacts, null, 2);
+      fs.writeFileSync(fileName, data);
+      console.log(`Contacts saved to ${fileName} successfully.`);
+    } catch (error) {
+      console.error("Failed to save contacts to file:", error);
+    }
   }
 }
 
@@ -361,6 +370,7 @@ class AddressBookSystem {
       console.log("7. Sort Contacts by State");
       console.log("8. Sort Contacts by Zip");
       console.log("9. Go Back");
+      console.log("10. Save Contacts to File");
 
       const choice: string = readline.question("Enter your choice: ");
 
@@ -391,11 +401,17 @@ class AddressBookSystem {
           break;
         case "9":
           return;
+          case "10": {
+            const fileName = readline.question("Enter file name to save contacts: ");
+            addressBook.saveToFile(fileName);
+            break;
+          }
         default:
           console.log("Invalid choice. Please try again.");
       }
     }
   }
+  
   // Main menu w
   menu(): void {
     while (true) {

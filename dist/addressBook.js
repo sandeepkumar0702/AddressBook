@@ -1,4 +1,5 @@
 import * as readline from "readline-sync";
+import * as fs from "fs";
 class AddressBook {
     contacts;
     constructor() {
@@ -120,6 +121,16 @@ class AddressBook {
         });
         console.log(`\nContacts sorted by ${criteria.charAt(0).toUpperCase() + criteria.slice(1)}:`);
         this.displayContacts();
+    }
+    saveToFile(fileName) {
+        try {
+            const data = JSON.stringify(this.contacts, null, 2);
+            fs.writeFileSync(fileName, data);
+            console.log(`Contacts saved to ${fileName} successfully.`);
+        }
+        catch (error) {
+            console.error("Failed to save contacts to file:", error);
+        }
     }
 }
 class AddressBookSystem {
@@ -272,6 +283,7 @@ class AddressBookSystem {
             console.log("7. Sort Contacts by State");
             console.log("8. Sort Contacts by Zip");
             console.log("9. Go Back");
+            console.log("10. Save Contacts to File");
             const choice = readline.question("Enter your choice: ");
             switch (choice) {
                 case "1":
@@ -300,6 +312,11 @@ class AddressBookSystem {
                     break;
                 case "9":
                     return;
+                case "10": {
+                    const fileName = readline.question("Enter file name to save contacts: ");
+                    addressBook.saveToFile(fileName);
+                    break;
+                }
                 default:
                     console.log("Invalid choice. Please try again.");
             }
