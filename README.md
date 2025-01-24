@@ -1,4 +1,6 @@
-#ADDRESSBOOK 
+# BridgeLabz_1261_Sandeep
+# Topic Covered
+
 **Date-15-01-25** 
 - Introduction to TypeScript
 - What is TypeScript
@@ -10,7 +12,7 @@
     - null, undefined, any
     - unknown vs any
     - Type inference
-    - 
+
 **Date-16-01-25**  
 - Functions
     - Function types and return types
@@ -32,7 +34,7 @@
     - Readonly arrays
     - Tuples and tuple types
 
-**Date-17-01-25**
+**Date-17-01-25**  
 - Basic Object Types:
     - Defining objects with type annotations
     - Nested object types
@@ -60,6 +62,7 @@
     - Import/export syntax
     - Default and named exports
     - Module resolution
+
 **Date-21-01-25**  
 - Advanced Types
     - Mapped types
